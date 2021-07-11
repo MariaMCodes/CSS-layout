@@ -1,0 +1,293 @@
+/* Normal flow: block formatting */
+
+.violet {
+    background-color: rgb(146, 105, 146);
+    border: 3px solid purple;
+}
+
+.red {
+    background-color: rgb(243, 156, 156);
+    border: 3px solid red;
+}
+
+.blue {
+    background-color: rgb(144, 144, 241);
+    border: 3px solid blue;
+}
+
+.green {
+    background-color: rgb(151, 238, 151);
+    border: 3px solid green;
+}
+
+.orange {
+    background-color: rgb(252, 209, 129);
+    border: 3px solid orange;
+}
+
+.float {
+    float: left;
+}
+
+.foo {
+    padding-top: 10px;
+}
+
+.bar {
+    width: 30%;
+}
+
+.baz {
+    width: 40%;
+}
+
+
+/* In the example above:
+
+- every block box is on the left outer edge of the containing block
+- the presence of a float does not influence the position of the left outer edge (per spec) in any way, except to offset the text
+- the block box foo (which has no width set) expands to the full container width
+- the two other boxes, which have set widths extend from the left edge of the container
+- the two other boxes are not moved around in any way, even though they would for example fit on a single row */
+
+
+/* Vertical alignment within line boxes: vertical-align */
+
+.parent {
+    font-size: 48pt;
+    border: 1px solid black;
+    float: left;
+}
+
+.child {
+    font-size: 12pt;
+    vertical-align: baseline;
+}
+
+.super {
+    font-size: 12pt;
+    vertical-align: super;
+}
+
+
+/* In the example above:
+
+- even though the first parent element does not contain any text by itself, the baseline and the minimal line height of the line boxes inside that parent element is defined by the font size set on the parent element.
+- The first child element's baseline is aligned with the parent's baseline. The parent's baseline is based on the font size set on the parent element even though the parent contains no text that uses that font size. This is the "strut" mechanism in action, where the parent baseline is defined by an invisible, zero-width inline box with the element's font and line height properties.
+- Next, a series of vertical-align: super inline elements gradually shift the baseline, which could increase the line height further (in this case it does not because the parent font is so large). This illustrates how alignment can increase line box height.
+- Finally, the span with "super-parent" is on the same level as the first "child" element, so its baseline is shifted according to the parent's font size's super position, which appears much higher than the other two super -aligned inline elements because the parent font size larger than the child font size.
+
+
+/* Inline-block vertical centering technique */
+
+#inline-block .container {
+    text-align: center;
+    overflow: auto;
+    height: 120px;
+}
+
+.container::after,
+.block {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.container:after {
+    content: "";
+    height: 100%;
+    margin-left: -0.25em;
+    /* To offset spacing. May vary by font */
+    width: 10px;
+    /* to show the inserted pseudo element */
+    background-color: lightgreen;
+    /* to show the inserted pseudo element */
+}
+
+.block {
+    max-width: 99%;
+    /* Prevents issues with long content causes the content block to be pushed to the top */
+}
+
+
+/* 
+- the inner blocks inside the container are display: inline-block, meaning they are treated as inline-level boxes and produce an inline formatting context, but their contents behave like display: block elements (for example, setting width: 100% works!).
+- the container has text-align: center to cause the inline-level blocks to be centered on each line box.
+- - the content block has vertical-align: middle set on it, which aligns it vertically relative to all the other content on the line box.
+a pseudo-element with height: 100% is added to the end of the container. It is shown in green. This is necessary because without it, the content block would simply be positioned at the top of the flow, because it would exist on its own on a single line box, and the line box height would simply match the content block, which would mean that there would be nothing to align it with.
+- the margin-left: -0.25em is simply a heuristic to offset the spacing caused by the pseudo element. 
+
+In short, the reason why this centering technique works is because we have forced the line height of the container to be 100% percent of the parent height, and then have asked for the centered item to be positioned at the midpoint of the sibling (green) element. Assuming that the box to be centered is less wide than the container, all of this will be placed on a single, very tall line box and the end result is vertical and horizontal centering.
+*/
+
+
+/* The last example illustrates an additional interaction where anonymous box generation can cause problems with the distribution of inline-level boxes onto line boxes: */
+
+.half {
+    display: inline-block;
+    width: 50%;
+    border-width: 0;
+}
+
+
+/* In the example above:
+
+the two divs are sized to width: 50%, however, they are wrapped on to two lines.
+The problem here is that the whitespace between the two divs causes an anonymous inline box to be generated. With the anonymous inline box, the contents of the line box add up to more than 100% of the available width of the parent, causing a second line box to be created. */
+
+
+/* to solve this is to set font-size to 0 in the parent layer, and then to set it to the value you want in the two child divs. This should cause the whitespace to not take up any space. */
+
+#soln1 {
+    font-size: 0;
+}
+
+#half1 {
+    font-size: 12px;
+}
+
+
+/* Setting white-space: nowrap also helps - it doesn't get rid of the whitespace, but it does prevent line breaking due to whitespace. In this case, the two divs would be positioned on the same line box, but with a space in between, and the right div would overflow the parent container. */
+
+#soln2 {
+    white-space: nowrap;
+}
+
+
+/* Vertical-align: middle doesn't quite do what you'd expect */
+
+.parent2 {
+    height: 60px;
+    font-family: monospace;
+}
+
+.child2 {
+    font-size: medium;
+    vertical-align: middle;
+}
+
+
+/* As you can see above, the child is aligned with the line boxes x-height (x-height is literally the height of an x character in the font rather than half the height of the parent element), not the parent element's height. Since the line only contains the span plus generated anonymous inline-level boxes for the whitespace, its height matches the line-height of the font, and nothing happens. In fact, since we are talking about x-height rather than height, the height of the line box doesn't even matter.  */
+
+.parenta {
+    height: 60px;
+    font-family: monospace;
+}
+
+.parentb {
+    height: 60px;
+    font-family: monospace;
+    font-size: 40px;
+}
+
+.large {
+    font-size: 40px;
+}
+
+.childa {
+    font-size: medium;
+    vertical-align: middle;
+}
+
+
+/* If you compare the two boxes in the example:
+
+- in the first example, the alignment between the first < and the x appears to be exactly the same as before even though the line box height is now much greater due to the second <.
+- in the second example, the height of the line box is the same as before. However, I also increased the font size of the parent. This causes both the baseline of the parent box to move and also increases the x-height (literally, the height of an x in the parent's font). As you can see, the position of the first < finally changes.
+
+The short version of this is that vertical-align: middle really means "place the child element above the baseline of the parent element at half the height of an x character in the parent font" - not "middle" in almost any circumstance. This is a very font-centric view of the world: it's not the middle of the parent element and not even the middle of the line box that the child element resides on. While vertical-align: middle often looks fine, pedantically speaking it's not the middle of anything other than an x-glyph in the parent font. */
+
+
+/* Normal flow: relative positioning 
+
+Relative positioning is considered to be part of the normal flow, since it does not differ substantially from normal flow. 
+
+Relatively positioned elements are positioned as normal, then offset from their normal position based on the top, left, bottom and right property values.*/
+
+.float2 {
+    float: left;
+}
+
+.foo2 {
+    padding-top: 10px;
+}
+
+.bar2 {
+    position: relative;
+    top: -20px;
+    /* otherwise would appear under blue box */
+    left: 10px;
+    width: 30%;
+}
+
+.baz2 {
+    width: 40%;
+}
+
+
+/* As you can see in the example:
+
+- the .bar box is offset 20 pixels up from its normal flow position because it has top: -20px
+- the subsequent .baz box is still positioned as if the .bar box was in its original position in the normal flow */
+
+
+/* Float positioning scheme */
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+
+/* In the example above:
+
+- The first, 3rd and 5th divs have float: left and the second, 4th and 6th divs have float: right.
+- All divs stacked in markup order, with the first left or right floated div taking the leftmost or rightmost position and so on. */
+
+
+/* Floats are ignored for the purpose of vertically positioning block boxes in the same flow. However, floats can affect the line boxes contained within block boxes in normal flow: */
+
+.float-eg {
+    float: left;
+    height: 100px;
+}
+
+.para {
+    margin: 0;
+}
+
+
+/* In the example above:
+
+- All of the block-level divs (.para) are vertically positioned as if they were in a block formatting context on their own.
+- The float influences the current and subsequent line boxes, but not the line boxes of the first block-level div because it precedes the float.
+- It is worth noting that I did not use p tags for the paragraphs, because they would be interpreted differently and would produce a different rendering. This is not because of CSS, but because HTML disallows divs (like the float) inside p tags and browser error correction behavior will result in a different corrected markup and rendering. */
+
+
+/* Floats do not affect the line boxes inside elements in normal flow that establish new block formatting contexts. Instead, such elements are either placed to the side of the float, or cleared by placing them below any preceding floats: */
+
+.float-eg2 {
+    float: left;
+    height: 100px;
+}
+
+.para2 {
+    margin: 0;
+}
+
+.new-context {
+    margin: 0;
+    overflow: auto;
+}
+
+
+/* In the example above:
+
+- The new-context div establishes a new formatting context (e.g. because its overflow is not visible).
+- The float that precedes that div does not affect the line boxes of new-context. As you can see, the border of new-context is next to the border of the float, and the new-context box is placed next to the float.
+- The float does affect the line boxes of the following div, because it does not establish a new block formatting context. The left border of the div containing "after" is drawn underneath the float. */
+
+
+/* Float clearing */
