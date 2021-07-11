@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+</head>
+
+<body>
+    <!--Normal flow: block formatting-->
+    <section>
+        <div class="container violet">
+            <div class="float red">float</div>
+            <div class="foo blue">foo</div>
+            <div class="bar green">bar</div>
+            <div class="baz orange">baz</div>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <!--Vertical alignment within line boxes: vertical-align-->
+    <section>
+        <div class="parent">
+            <span class="child">child
+        <span class="super">sup
+        <span class="super">sup</span>
+            </span>here
+            </span>
+            <span class="super">sup-parent</span>
+        </div>
+        <div class="parent">aA</div>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!--Inline-block vertical centering technique-->
+    <section id="inline-block">
+        <div class="container blue">
+            <div class="block red">Centered</div>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <!--The last example illustrates an additional interaction where anonymous box generation can cause problems with the distribution of inline-level boxes onto line boxes:-->
+    <section>
+        <div class="blue">
+            <div class="half green">width: 50%</div>
+            <div class="half orange">width: 50%</div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div id="soln1" class="blue">
+            <div id="half1" class="half green">width: 50%</div>
+            <div id="half1" class="half orange">width: 50%</div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div id="soln2" class="blue">
+            <div class="half green">width: 50%</div>
+            <div class="half orange">width: 50%</div>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <!--Vertical-align: middle doesn't quite do what you'd expect-->
+    <section>
+        <div class="parent2 blue">
+            x
+            <span class="child2 green">&lt;</span>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div class="parenta blue">
+            x
+            <span class="childa green">&lt;</span>
+            <span class="large green">&lt;</span>
+        </div>
+        <div class="parentb blue">
+            x
+            <span class="childa green">&lt;</span>
+            <span class="large green">&lt;</span>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <!--Normal flow: relative positioning-->
+    <section>
+        <div>
+            <div class="float2 red">float</div>
+            <div class="foo2 blue">foo</div>
+            <div class="bar2 green">bar</div>
+            <div class="baz2 orange">baz</div>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <!--Float positioning scheme-->
+    <section>
+        <div class="left red">A</div>
+        <div class="right blue">B</div>
+        <div class="left red">C</div>
+        <div class="right blue">D</div>
+        <div class="left red">E</div>
+        <div class="right blue">F</div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div class="para blue">Text inside a block-level box placed on a line box before the float</div>
+        <div class="para green">Text before the float.
+            <div class="float-eg red">The float</div> Text after the float.</div>
+        <div class="para orange">Text inside a block-level box placed on a line box after the float</div>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <section>
+        <div class="para2 blue">before</div>
+        <div class="float-eg2 red">The float</div>
+        <div class="new-context green">new formatting context<br>foo bar</div>
+        <div class="para2 orange">after</div>
+    </section>
+    <br>
+    <br>
+    <!--Float clearing-->
+    <section>
+
+    </section>
+</body>
+
+
+
+</html>
