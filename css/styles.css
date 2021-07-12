@@ -290,4 +290,90 @@ Relatively positioned elements are positioned as normal, then offset from their 
 - The float does affect the line boxes of the following div, because it does not establish a new block formatting context. The left border of the div containing "after" is drawn underneath the float. */
 
 
-/* Float clearing */
+/* Float clearing 
+
+The clear property can take one of the following values: left, right, both, none. Eg: */
+
+.left2,
+.right2 {
+    width: 35%;
+    height: 40px;
+}
+
+.left2 {
+    float: left;
+}
+
+.right2 {
+    float: right;
+}
+
+.clear-left {
+    clear: left;
+}
+
+.clear-both {
+    clear: both;
+}
+
+
+/* Another potentially surprising property of floats is that they are not taken into account when calculating the height of the parent! If there are no other elements in the parent element, then the parent element will have a height of zero. The example below illustrates: */
+
+.left3 {
+    float: left;
+    width: 35%;
+    height: 40px;
+}
+
+
+/* Float boxes are on top of orange parent need clearfix property */
+
+
+/* The Clearfix 
+
+A clearfix combines several desirable properties into one class:
+
+- It prevents the floats within the clearfixed parent element from affecting line boxes in other elements that follow the clearfixed element
+- It causes the floats within the clearfixed parent element to be taken into account when calculating that element's height 
+
+For example, given the following markup - where no clearfix is active: */
+
+.left4 {
+    float: left;
+    width: 15%;
+    height: 40px;
+}
+
+
+/* Instead of explicitly adding an element, we can use the :after pseudo element to insert additional content at the end of the .clearfixed div. Here's what a basic clearfix following that pattern would look like: */
+
+.clearfix2:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.left5 {
+    float: left;
+    width: 15%;
+    height: 40px;
+}
+
+
+/* Alternatively */
+
+
+/* Finally, making the .clearfixed element establish a new formatting context - by setting the overflow value to something other than visible - also works. This also affects how the automatic height of the element is calculated (see details in the next chapter), so that floats are taken into account when calculating height: */
+
+.clearfix3 {
+    overflow: auto;
+}
+
+.left6 {
+    float: left;
+    width: 15%;
+    height: 40px;
+}
+
+
+/* Which technique should you use? The first, pseudo-element based technique is more common, because it avoids issues with element overflow. Setting overflow to something other than visible may cause content to be clipped and may cause scrollbars to appear.  */
